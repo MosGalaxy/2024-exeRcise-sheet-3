@@ -149,11 +149,19 @@ combined_data <- bind_rows(vornamen_2023, vornamen_2022)
 head(combined_data)
 ```
 
-### f) Combine the counts for same names to determine the most popular
-
-```         
-names across both years. Print out the top 10 names in a nicely
+### f) Combine the counts for same names to determine the most popular names across both years. Print out the top 10 names in a nicely
 formatted table for both years. Include a table caption.
+
+```{r}         
+# Group the data by name and sum the counts
+popular_names <- combined_data %>%
+  group_by(Vorname) %>%
+  summarise(Total_Count = sum(Anzahl)) %>%
+  arrange(desc(Total_Count))
+
+# Print out the top 10 names for both years in a nicely formatted table
+cat("\nTable: Top 10 Most Popular Names Across 2022 and 2023\n")
+print(popular_names[1:10, ], row.names = FALSE)
 ```
 
 ## Exercise 4: Open Analysis

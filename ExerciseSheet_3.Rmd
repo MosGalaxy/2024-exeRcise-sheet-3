@@ -126,10 +126,16 @@ total_babies_2022 <- sum(vornamen_2022$Anzahl)
 
 The baby-boom was bigger in 2022.
 
-### d) Add a new column `year` to both datasets which holds the correct
+### d) Add a new column `year` to both datasets which holds the correct year for each.
 
-```         
-year for each.
+```{r}
+# Add a new column 'year' to both datasets
+vornamen_2022$year <- 2023
+vornamen_2023$year <- 2022
+
+# Print the datasets to verify the changes
+head(vornamen_2023)
+head(vornamen_2022)
 ```
 
 ### e) Combine both datasets into one using `bind_rows()`.

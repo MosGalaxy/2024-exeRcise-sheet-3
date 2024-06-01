@@ -11,6 +11,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(readr)
 ```
 
 ## Exercise 1: Initializing git
@@ -95,12 +96,30 @@ some of the counts are inaccurate because of this. Explain your
 solution and the repercussions.
 
 ```{r}
+# Load data for 2023 and 2022
+vornamen_2023 <- read_csv("DATA/vornamen-muenchen-2023.csv")
+vornamen_2022 <- read_csv("DATA/open_data_portal_2022.csv")
+
+# Check the type of the "Anzahl" variable for both years
+class(vornamen_2023$Anzahl)
+class(vornamen_2022$Anzahl)
 ```
 
-### c) Calculate the total number of babies born in Munich in 2022
+After examining the data, we found that some counts are represented as non-numeric values (e.g., "4 oder weniger"). We can use ifelse to conditionally convert "4 oder weniger" to 4 while keeping other values as numeric. 
 
-```         
-and 2023. Which year had the bigger baby-boom?
+Compared to converting to NA, this approach retains the sample size and contextual information associated with the "<= 4" values if necessary.
+
+```{r}
+# Convert non-numeric values to 4 and the column to numeric
+vornamen_2023$Anzahl <- ifelse(vornamen_2023$Anzahl == "4 oder weniger", 4, as.numeric(vornamen_2023$Anzahl))
+
+vornamen_2022$Anzahl <- ifelse(vornamen_2022$Anzahl == "4 oder weniger", 4, as.numeric(vornamen_2022$Anzahl))
+```
+
+### c) Calculate the total number of babies born in Munich in 2022 and 2023. Which year had the bigger baby-boom?
+
+```{r}
+
 ```
 
 ### d) Add a new column `year` to both datasets which holds the correct

@@ -12,6 +12,7 @@ editor_options:
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(readr)
+library(dplyr)
 ```
 
 ## Exercise 1: Initializing git
@@ -139,6 +140,14 @@ head(vornamen_2022)
 ```
 
 ### e) Combine both datasets into one using `bind_rows()`.
+
+```{r}
+# Combine both datasets into one
+combined_data <- bind_rows(vornamen_2023, vornamen_2022)
+
+# Print the combined dataset
+head(combined_data)
+```
 
 ### f) Combine the counts for same names to determine the most popular
 

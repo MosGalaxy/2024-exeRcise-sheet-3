@@ -179,22 +179,16 @@ determining the research question yourself.
 -   Dataset Name: Indicators for "What is PPP?" - World Bank
 -   Link: <https://github.com/owid/owid-datasets/tree/master/datasets/Indicators%20for%20!What%20is%20PPP!%20%20-%20World%20Bank#indicators-for-what-is-ppp----world-bank>
 
-### d) Come up with a (research) question you want to answer with the data
+### d) Come up with a (research) question you want to answer with the data and briefly explain why you believe this is an interesting question within one sentence. It should be a question that can be answered with the dataset and using R.
 
-```         
-and briefly explain why you believe this is an interesting question
-within one sentence. It should be a question that can be answered
-with the dataset and using R.
-```
+**Research Question**: How does the price level ratio of PPP conversion factor to market exchange rate correlate with GDP per capita across countries?
+
+**Explaination**: The question examines how the cost of living (price level ratio) relates to economic productivity (GDP per capita) across countries, which aims to understand how differences in purchasing power and market exchange rates affect the relative economic well-being and cost of living of individuals in different countries as well as provide insights into global economic disparities and resource allocation efficiency.
 
 ### e) Use R to answer your chosen question.
 
-### f) Create a meaningful plot / figure with the dataset. Make sure to
+### f) Create a meaningful plot / figure with the dataset. Make sure to provide a figure caption (via the chunk options / Rmarkdown) and correctly label the figure.
 
-```         
-provide a figure caption (via the chunk options / Rmarkdown) and
-correctly label the figure.
-```
 
 ## Final Note
 

@@ -14,6 +14,7 @@ library(tidyverse)
 library(readr)
 library(dplyr)
 library(tidyr)
+library(knitr)
 library(stringr)
 library(janitor)
 library(ggplot2)
@@ -119,8 +120,7 @@ popular_names <- combined_data %>%
   arrange(desc(Total_Count))
 
 # Print out the top 10 names for both years in a nicely formatted table
-cat("\nTable: Top 10 Most Popular Names Across 2022 and 2023\n")
-print(popular_names[1:10, ], row.names = FALSE)
+kable(popular_names[1:10, ], row.names = FALSE, caption = "Top 10 Most Popular Names Across 2022 and 2023")
 ```
 
 ## Exercise 4: Open Analysis

@@ -4,6 +4,8 @@
  
 Where: 
 
+**Price Level Ratio (PLR)**: Indicates the relative cost of goods and services compared to the US.
+
 **PPP Conversion Factor**: Number of units of the local currency required to buy the same amount of goods and services in the domestic market as 1 USD would buy in the US. PPP conversion factors are based on the 2011 ICP round.
 
 **Market Exchange Rate**: Number of units of the local currency that equals 1 USD in the forex market.

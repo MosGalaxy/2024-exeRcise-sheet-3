@@ -15,7 +15,6 @@ library(readr)
 library(dplyr)
 library(tidyr)
 library(stringr)
-install.packages("janitor")
 library(janitor)
 library(ggplot2)
 ```
@@ -197,11 +196,8 @@ determining the research question yourself.
 PLR_GDPcp_1990_2015 <- read_csv("DATA/PLR_GDPcp_1990_2015.csv")
 
 # View the data structure
-glimpse(PLR_GDPcp_1990_2015)
 head(PLR_GDPcp_1990_2015)
-str(PLR_GDPcp_1990_2015)
 ```
-
 
 ```{r}
 # Standardize the column names to snake_case
@@ -261,18 +257,11 @@ The correlation between PLR and the GDP disparity is -0.9859214, indicating a st
 
 ### f) Create a meaningful plot / figure with the dataset. Make sure to provide a figure caption (via the chunk options / Rmarkdown) and correctly label the figure.
 
-```{r}
+```{r, fig.cap="Relationship between Price Level Ratio and GDP Disparity"}
 # Create a scatter plots
-ggplot(PPP_GDP_2015, aes(x = pl_ratio, y = gdp_cap_ppp)) +
+ggplot(high_inflated_2015, aes(x = plr, y = gdp_diff)) +
   geom_point() +
-  labs(x = "Price Level Ratio", y = "GDP per Capita (PPP)") +
-  ggtitle("Relationship between Price Level Ratio and GDP per Capita (PPP)")
-
-ggplot(PPP_GDP_2015, aes(x = pl_ratio, y = gdp_cap_usd)) +
-  geom_point() +
-  labs(x = "Price Level Ratio", y = "GDP per Capita (USD)") +
-  ggtitle("Relationship between Price Level Ratio and GDP per Capita (USD)")
-
+  labs(x = "Price Level Ratio", y = "GDP Disparity")
 ```
 ## Final Note
 

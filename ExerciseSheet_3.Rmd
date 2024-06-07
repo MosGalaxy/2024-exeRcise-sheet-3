@@ -9,10 +9,14 @@ editor_options:
     wrap: 72
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE}
 library(tidyverse)
 library(readr)
 library(dplyr)
+library(tidyr)
+library(stringr)
+install.packages("janitor")
+library(janitor)
 ```
 
 ## Exercise 1: Initializing git
@@ -186,6 +190,53 @@ determining the research question yourself.
 **Explaination**: The question examines how the cost of living (price level ratio) relates to economic productivity (GDP per capita) across countries, which aims to understand how differences in purchasing power and market exchange rates affect the relative economic well-being and cost of living of individuals in different countries as well as provide insights into global economic disparities and resource allocation efficiency.
 
 ### e) Use R to answer your chosen question.
+
+```{r}
+# Load the dataset in R
+PPP_GDP_1990_2015 <- read_csv("DATA/PPP_GDP_1990_2015_world_bank.csv")
+
+# View the data structure
+glimpse(PPP_GDP_1990_2015)
+head(PPP_GDP_1990_2015)
+str(PPP_GDP_1990_2015)
+```
+
+
+```{r}
+# Standardize the column names to snake_case
+PPP_GDP_1990_2015 <- PPP_GDP_1990_2015 %>%
+  clean_names() 
+
+# Abbreviate the column names
+PPP_GDP_1990_2015 <- PPP_GDP_1990_2015 %>%
+  rename(
+    pl_ratio = price_level_ratio_of_ppp_conversion_factor_gdp_to_market_exchange_rate_world_bank,
+    gdp_cap_ppp = gdp_per_capita_ppp_int_adjusted_world_bank,
+    gdp_cap_usd = gdp_per_capita_us_market_exchange_world_bank
+  ) 
+```
+
+```{r}
+# Check for missing values
+summary(PPP_GDP_1990_2015)
+
+# Remove rows with missing values
+PPP_GDP_2015 <- na.omit(PPP_GDP_1990_2015)
+```
+```{r}
+# Calculate correlation between price level ratio and GDP per capita (PPP)
+cor_ppp <- cor(PPP_GDP_2015$pl_ratio, PPP_GDP_2015$gdp_cap_ppp, use = "complete.obs")
+
+# Calculate correlation between price level ratio and GDP per capita (US$)
+cor_usd <- cor(PPP_GDP_2015$pl_ratio, PPP_GDP_2015$gdp_cap_usd, use = "complete.obs")
+
+# Print correlation values in one sentence
+cat("The correlation between price level ratio and GDP per capita (PPP) is", cor_ppp, "and between price level ratio and GDP per capita (US$) is", cor_usd, ".")
+```
+The correlation between the price level ratio and GDP per capita (PPP) is 0.487, indicating a moderate positive correlation, and between the price level ratio and GDP per capita (US$) is 0.720, indicating a strong positive correlation. 
+
+The stronger correlation with GDP per capita measured in US dollars suggests that currency exchange rates play a significant role in determining the relationship between the price level ratio and economic productivity. Countries with higher price levels relative to the US may experience higher GDP per capita when measured in US dollars due to favorable exchange rates.
+On the other hand, the moderate correlation with GDP per capita measured using purchasing power parity implies that differences in purchasing power also contribute to variations in GDP per capita but to a lesser extent compared to currency exchange rates.
 
 ### f) Create a meaningful plot / figure with the dataset. Make sure to provide a figure caption (via the chunk options / Rmarkdown) and correctly label the figure.
 

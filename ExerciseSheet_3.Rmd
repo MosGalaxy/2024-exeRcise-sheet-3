@@ -17,6 +17,7 @@ library(tidyr)
 library(stringr)
 install.packages("janitor")
 library(janitor)
+library(ggplot2)
 ```
 
 ## Exercise 1: Initializing git
@@ -185,62 +186,94 @@ determining the research question yourself.
 
 ### d) Come up with a (research) question you want to answer with the data and briefly explain why you believe this is an interesting question within one sentence. It should be a question that can be answered with the dataset and using R.
 
-**Research Question**: How does the price level ratio of PPP conversion factor to market exchange rate correlate with GDP per capita across countries?
+**Research Question**: How does the Price Level Ratio (PLR) affect the discrepancy between GDP per capita (PPP) and GDP per capita (USD) across countries?
 
-**Explaination**: The question examines how the cost of living (price level ratio) relates to economic productivity (GDP per capita) across countries, which aims to understand how differences in purchasing power and market exchange rates affect the relative economic well-being and cost of living of individuals in different countries as well as provide insights into global economic disparities and resource allocation efficiency.
+**Explaination**: This question explores the impact of cost of living on the perceived economic output per individual, providing insights into economic well-being across different countries.
 
 ### e) Use R to answer your chosen question.
 
 ```{r}
 # Load the dataset in R
-PPP_GDP_1990_2015 <- read_csv("DATA/PPP_GDP_1990_2015_world_bank.csv")
+PLR_GDPcp_1990_2015 <- read_csv("DATA/PLR_GDPcp_1990_2015.csv")
 
 # View the data structure
-glimpse(PPP_GDP_1990_2015)
-head(PPP_GDP_1990_2015)
-str(PPP_GDP_1990_2015)
+glimpse(PLR_GDPcp_1990_2015)
+head(PLR_GDPcp_1990_2015)
+str(PLR_GDPcp_1990_2015)
 ```
 
 
 ```{r}
 # Standardize the column names to snake_case
-PPP_GDP_1990_2015 <- PPP_GDP_1990_2015 %>%
+PLR_GDPcp_1990_2015 <- PLR_GDPcp_1990_2015 %>%
   clean_names() 
 
 # Abbreviate the column names
-PPP_GDP_1990_2015 <- PPP_GDP_1990_2015 %>%
+PLR_GDPcp_1990_2015 <- PLR_GDPcp_1990_2015 %>%
   rename(
-    pl_ratio = price_level_ratio_of_ppp_conversion_factor_gdp_to_market_exchange_rate_world_bank,
-    gdp_cap_ppp = gdp_per_capita_ppp_int_adjusted_world_bank,
-    gdp_cap_usd = gdp_per_capita_us_market_exchange_world_bank
+    plr = price_level_ratio_of_ppp_conversion_factor_gdp_to_market_exchange_rate_world_bank,
+    gdp_pc_ppp = gdp_per_capita_ppp_int_adjusted_world_bank,
+    gdp_pc_usd = gdp_per_capita_us_market_exchange_world_bank
   ) 
 ```
 
 ```{r}
 # Check for missing values
-summary(PPP_GDP_1990_2015)
+summary(PLR_GDPcp_1990_2015)
 
 # Remove rows with missing values
-PPP_GDP_2015 <- na.omit(PPP_GDP_1990_2015)
+PLR_GDPcp_2015 <- na.omit(PLR_GDPcp_1990_2015)
 ```
+
 ```{r}
-# Calculate correlation between price level ratio and GDP per capita (PPP)
-cor_ppp <- cor(PPP_GDP_2015$pl_ratio, PPP_GDP_2015$gdp_cap_ppp, use = "complete.obs")
+# Filter out rows where price level ratio is greater than 1
+higher_lc_2015 <- PLR_GDPcp_2015 %>% 
+  filter(plr > 1)
 
-# Calculate correlation between price level ratio and GDP per capita (US$)
-cor_usd <- cor(PPP_GDP_2015$pl_ratio, PPP_GDP_2015$gdp_cap_usd, use = "complete.obs")
-
-# Print correlation values in one sentence
-cat("The correlation between price level ratio and GDP per capita (PPP) is", cor_ppp, "and between price level ratio and GDP per capita (US$) is", cor_usd, ".")
+print(higher_lc_2015) # Countries of higher living costs in 2015
 ```
-The correlation between the price level ratio and GDP per capita (PPP) is 0.487, indicating a moderate positive correlation, and between the price level ratio and GDP per capita (US$) is 0.720, indicating a strong positive correlation. 
 
-The stronger correlation with GDP per capita measured in US dollars suggests that currency exchange rates play a significant role in determining the relationship between the price level ratio and economic productivity. Countries with higher price levels relative to the US may experience higher GDP per capita when measured in US dollars due to favorable exchange rates.
-On the other hand, the moderate correlation with GDP per capita measured using purchasing power parity implies that differences in purchasing power also contribute to variations in GDP per capita but to a lesser extent compared to currency exchange rates.
+The table indicates that goods and services were relatively more expensive in these countries compared to the United States back in 2015. 
+
+However, this does not directly imply a higher inflation rate of the year. To examine if there was a higher inflation rate, we need to take a closer look at the differences between GDP per capita (PPP) and GDP per capita (USD).
+
+```{r}
+# Compute the difference between GDP per capita (PPP) and GDP per capita (USD)
+PLR_GDPcp_2015 <- PLR_GDPcp_2015 %>%
+  mutate(gdp_diff = gdp_pc_ppp - gdp_pc_usd)
+
+high_inflated_2015 <- PLR_GDPcp_2015 %>%
+  filter(gdp_diff < 0)
+
+print(high_inflated_2015)
+```
+
+The table shows these countries experienced a high inflation back in 2015.
+
+```{r}
+# Calculate correlation
+correlation <- cor(higher_lc_2015$plr, high_inflated_2015$gdp_diff)
+
+# Print correlation
+print(correlation)
+```
+The correlation between PLR and the GDP disparity is -0.9859214, indicating a strong positive correlation. In this case, as PLR increases, the GDP disparity tends to widen.
 
 ### f) Create a meaningful plot / figure with the dataset. Make sure to provide a figure caption (via the chunk options / Rmarkdown) and correctly label the figure.
 
+```{r}
+# Create a scatter plots
+ggplot(PPP_GDP_2015, aes(x = pl_ratio, y = gdp_cap_ppp)) +
+  geom_point() +
+  labs(x = "Price Level Ratio", y = "GDP per Capita (PPP)") +
+  ggtitle("Relationship between Price Level Ratio and GDP per Capita (PPP)")
 
+ggplot(PPP_GDP_2015, aes(x = pl_ratio, y = gdp_cap_usd)) +
+  geom_point() +
+  labs(x = "Price Level Ratio", y = "GDP per Capita (USD)") +
+  ggtitle("Relationship between Price Level Ratio and GDP per Capita (USD)")
+
+```
 ## Final Note
 
 Make sure to push all your commits and changes to GitHub before

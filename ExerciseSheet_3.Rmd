@@ -176,8 +176,8 @@ determining the research question yourself.
 
 ### c) Put the name / title of the dataset and a link to it below.
 
--   Dataset Name: ...
--   Link: <https://github.com/owid/owid-datasets/>...
+-   Dataset Name: Indicators for "What is PPP?" - World Bank
+-   Link: <https://github.com/owid/owid-datasets/tree/master/datasets/Indicators%20for%20!What%20is%20PPP!%20%20-%20World%20Bank#indicators-for-what-is-ppp----world-bank>
 
 ### d) Come up with a (research) question you want to answer with the data
 
